@@ -16,6 +16,10 @@ function (setvar_default var_)
     endif ()
 endfunction ()
 
+enable_testing ()
+
+include (cotire OPTIONAL)
+
 setvar_default (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 setvar_default (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 setvar_default (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
@@ -28,3 +32,9 @@ set (UUIDVALUE_HEADERS include/UUIDValue.hpp)
 add_library (UUIDValue ${UUIDVALUE_SOURCES} ${UUIDVALUE_HEADERS})
     target_include_directories (UUIDValue PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
     target_compile_features (UUIDValue PUBLIC cxx_auto_type)
+
+if (COMMAND cotire)
+    cotire (UUIDValue)
+endif ()
+
+add_subdirectory (test)
