@@ -1,0 +1,6 @@
+[submodule "ext/lest"]
+	path = ext/lest
+	url = https://github.com/martinmoene/lest.git
+[submodule "ext/Catch"]
+	path = ext/Catch
+	url = https://github.com/philsquared/Catch.git
