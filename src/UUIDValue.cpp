@@ -43,4 +43,19 @@ namespace UUIDValue {
                         , static_cast<uint8_t> (v1 >> 48)
                         , static_cast<uint8_t> (v1 >> 56) } } ;
     }
+
+    std::string ToString (const uuid_t &uuid) {
+        static const char   digits [] = { '0', '1', '2', '3'
+                                        , '4', '5', '6', '7'
+                                        , '8', '9', 'a', 'b'
+                                        , 'c', 'd', 'e', 'f' } ;
+        std::string result ;
+        result.reserve (2 * uuid.size ()) ;
+
+        for (auto v : uuid) {
+            result.push_back (digits [(v >> 4) & 0x0Fu]) ;
+            result.push_back (digits [(v >> 0) & 0x0Fu]) ;
+        }
+        return result ;
+    }
 }
