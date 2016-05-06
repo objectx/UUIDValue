@@ -17,4 +17,4 @@ if (COMMAND cotire)
 endif ()
 
 add_test (NAME test-UUIDValue
-          COMMAND test-UUIDValue)
+          COMMAND test-UUIDValue -r compact)
