@@ -2,19 +2,12 @@
 #include "common.hpp"
 #include <UUIDValue.hpp>
 
-#define CHECK_UUID(X_)  do {                \
-        auto const &    uuid_ = (X_) ;      \
-        REQUIRE ((uuid_ [6] >> 4) == 4) ;   \
-        REQUIRE ((uuid_ [8] >> 6) == 2) ;   \
-    } while (false)
-
-namespace Catch {
-    template <>
-        struct StringMaker<UUIDValue::uuid_t> {
-            static std::string  convert (const UUIDValue::uuid_t &uuid) {
-                return UUIDValue::ToString (uuid) ;
-            }
-        } ;
+namespace {
+    void check_uuid (const UUIDValue::uuid_t &uuid) {
+        INFO ("UUID: " << UUIDValue::ToString (uuid)) ;
+        REQUIRE ((uuid [6] >> 4) == 4) ;
+        REQUIRE ((uuid [8] >> 6) == 2) ;
+    }
 }
 
 SCENARIO ("The generated UUID values is UUID Ver.4" "[UUID]") {
@@ -28,7 +21,7 @@ SCENARIO ("The generated UUID values is UUID Ver.4" "[UUID]") {
         }
         WHEN ("Check Version") {
             THEN ("Should be ver.4") {
-                CHECK_UUID (uuid) ;
+                check_uuid (uuid) ;
             }
         }
     }
@@ -43,7 +36,7 @@ SCENARIO ("All of generated UUID values are distinct" "[UUID]") {
             uuids.emplace_back (UUIDValue::NewUUID ()) ;
         }
         REQUIRE (uuids.size () == count) ;
-        WHEN ("Uniquify") {
+        WHEN ("When uniquify the result") {
             std::sort (uuids.begin (), uuids.end ()) ;
             auto it = std::unique (uuids.begin (), uuids.end ()) ;
             THEN ("# of unique entries should be the same as original.") {
@@ -51,8 +44,7 @@ SCENARIO ("All of generated UUID values are distinct" "[UUID]") {
             }
             AND_THEN ("All of generated uuids should be ver.4") {
                 for (auto const &v : uuids) {
-                    INFO ("UUID: " << UUIDValue::ToString (v)) ;
-                    CHECK_UUID (v) ;
+                    check_uuid (v) ;
                 }
             }
         }
